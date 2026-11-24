@@ -60,10 +60,11 @@ void render(sf::RenderWindow &window, const sf::Font &font, const dungeon::World
 
     for (int y = 0; y < dungeon::Height; ++y)
         for (int x = 0; x < dungeon::Width; ++x)
-        {
-            const bool floor = world.walkable({x, y});
-            tile(window, {x, y}, 26, floor ? sf::Color{29, 44, 59} : sf::Color{45, 62, 84});
-        }
+            if (world.walkable({x, y}))
+                tile(window, {x, y}, 26, {29, 44, 59});
+    for (const auto &wall : world.walls())
+        if (wall)
+            tile(window, wall->cell(), 26, {45, 62, 84});
 
     tile(window, world.exit(), 20, world.exitOpen() ? Accent : sf::Color{202, 149, 72});
     for (const auto kit : world.pickups())
